@@ -1,6 +1,7 @@
 from socket import getaddrinfo, gethostname
 import ipaddress
 import sys
+import time
 from typing import Any, Callable, Type, List
 from types import TracebackType
 from azureml_appinsights_logger.observability \
@@ -12,65 +13,28 @@ logger = Observability()
 
 def main():
     """Example of debugging an Azure ML run remotely"""
-
-    # configuring the debugger
-    make_debugpy_excepthook(logger, 5678)
-
     try:
         logger.start_span("traning_step_with_exception")
         print("Before exception")
         raise Exception("This is an exception")
+    except Exception as e:
+        start_debugging(logger, 5678)
+        print("Debugging now")
     finally:
         logger.end_span()
 
 
-def make_debugpy_excepthook(logger: Observability, debugging_port: int) -> Callable[[Type[BaseException], BaseException, TracebackType], Any]:
-    """
-    Return an excepthook that will initialise debugpy and then call through to
-    its exception handler.
-    Taken from https://github.com/microsoft/debugpy/issues/723
-    """
+def start_debugging(logger: Observability, debugging_port: int):
     import debugpy
-
-    original_debugpy_excepthook = sys.excepthook
-
-    def debugpy_excepthook(
-        type_: Type[BaseException],
-        value: BaseException,
-        traceback: TracebackType,
-    ) -> Any:
-        """
-        Callback called when an exception is hit and debugpy is enabled.
-        """
-        if not debugpy.is_client_connected():
-            print(
-                f"Exception thrown. Waiting for debugpy on port {debugging_port}.")
-
-            external_ip = get_ip()[0]
-
-            # log a CRITICAL error - this should trigger an alert in Azure Monitor
-            logger.log(
-                f"Unhandled exception. Connect to {external_ip}:{debugging_port} for debugging.", severity=Severity.CRITICAL)
-
-            debugpy.listen((external_ip, debugging_port))
-            debugpy.wait_for_client()
-
-        import pydevd
-        import threading
-
-        py_db = pydevd.get_global_debugger()
-        thread = threading.current_thread()
-        additional_info = py_db.set_additional_thread_info(thread)
-        additional_info.is_tracing += 1
-        try:
-            arg = (type_, value, traceback)
-            py_db.stop_on_unhandled_exception(
-                py_db, thread, additional_info, arg)
-        finally:
-            additional_info.is_tracing -= 1
-        original_debugpy_excepthook(type_, value, traceback)
-
-    return debugpy_excepthook
+    external_ip = get_ip()[0]
+    # log a CRITICAL error - this should trigger an alert in Azure Monitor
+    logger.log(f"Unhandled exception. Connect to {external_ip}:{debugging_port} for debugging.", severity=Severity.CRITICAL)
+    # wait for the telemetry to be sent
+    time.sleep(15)
+    # wait for the debugger to be attached
+    debugpy.listen((external_ip, debugging_port))
+    debugpy.wait_for_client()
+    debugpy.breakpoint()
 
 
 def get_ip(ip_addr_proto="ipv4", ignore_local_ips=True) -> List[str]:
