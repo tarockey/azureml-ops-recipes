@@ -22,11 +22,16 @@ data "azurerm_machine_learning_workspace" "aml_workspace" {
   resource_group_name       = local.existing_aml_map.resource_group
 }
 
+resource "null_resource" "configure_azure_cli" {
+  provisioner "local-exec" {
+    command = "az config set extension.use_dynamic_install=yes_without_prompt"
+  }
+}
+
 data "external" "aml_workspace_all" {
-  program = ["az", "ml", "workspace", "show",
-    "--only-show-errors", "--output", "json",
-    "--name", local.existing_aml_map.resource_name,
-    "--resource-group", local.existing_aml_map.resource_group]
+  program = ["bash", "get_aml.sh",
+    local.existing_aml_map.resource_group,
+    local.existing_aml_map.resource_name]
 
   depends_on = [
     data.azurerm_machine_learning_workspace.aml_workspace
@@ -34,7 +39,7 @@ data "external" "aml_workspace_all" {
 }
 
 locals {
-  aml_json = jsondecode(data.external.aml_workspace_all.result)
+  aml_json = data.external.aml_workspace_all.result
   app_insights_map = regex(
         "(?i)^/Subscriptions/(?P<subscription_id>[^/]+)/resourceGroups/(?P<resource_group>[^/]+)/providers/(?P<provider>[^/]+)/.+/(?P<resource_name>.+)$",
         local.aml_json.application_insights)
@@ -70,11 +75,11 @@ resource "null_resource" "upgrade_app_insights" {
 }
 
 # Create applicationinsights-connection-string secret in the Azure ML workspace's Key Vault
-resource "azurerm_key_vault_secret" this {
-  name         = "applicationinsights-connection-string"
-  value        = data.azurerm_application_insights.app_insights.instrumentation_key
-  key_vault_id = local.key_vault
-}
+# resource "azurerm_key_vault_secret" this {
+#   name         = "applicationinsights-connection-string"
+#   value        = data.azurerm_application_insights.app_insights.instrumentation_key
+#   key_vault_id = local.key_vault
+# }
 
 resource "null_resource" "diag_settings" {
   provisioner "local-exec" {
