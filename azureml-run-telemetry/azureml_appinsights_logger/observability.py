@@ -36,13 +36,15 @@ class Loggers(ObservabilityAbstract):
         """
         run = Run.get_context()
         e = Env()
-        if not run.id.startswith(self.OFFLINE_RUN):
-            print("Registered AML Logger")
-            self.loggers.append(AzureMlLogger(run))
         if e.app_insights_connection_string:
             if "InstrumentationKey" in e.app_insights_connection_string:
                 print("Registered AppInsights Logger")
                 self.loggers.append(AppInsightsLogger(run))
+        
+        if not run.id.startswith(self.OFFLINE_RUN):
+            print("Registered AML Logger")
+            self.loggers.append(AzureMlLogger(run))
+
         if e.log_to_console:
             print("Registered Console Logger")
             self.loggers.append(ConsoleLogger(run))
@@ -111,18 +113,6 @@ class Observability(LoggerInterface):
         for logger in self._loggers.loggers:
             if type(logger) is type(logger_class):
                 return logger
-
-    def span(self, name='span'):
-        """Create a new span with the trace using the context information
-           for all registered loggers.
-        :type name: str
-        :param name: The name of the span.
-        :rtype: :class:`~opencensus.trace.span.Span`
-        :returns: The Span object.
-        """
-        for logger in self._loggers.loggers:
-            logger.span(name)
-        return self.current_span()
 
     def start_span(self, name='span'):
         """Start a span for all registered loggers.

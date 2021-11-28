@@ -22,15 +22,6 @@ class LoggerInterface(Tracer):
     def exception(self, exception):
         pass
 
-    def span(self, name='span'):
-        """Create a new span with the trace using the context information.
-        :type name: str
-        :param name: The name of the span.
-        :rtype: :class:`~opencensus.trace.span.Span`
-        :returns: The Span object.
-        """
-        pass
-
     def start_span(self, name='span'):
         """Start a span.
         :type name: str

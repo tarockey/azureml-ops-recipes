@@ -154,7 +154,7 @@ class AppInsightsLogger(LoggerInterface, ObservabilityAbstract):
         :rtype: :class:`~opencensus.trace.span.Span`
         :returns: The Span object.
         """
-        return self.start_span(name)
+        return self.tracer.span(name)
 
     def start_span(self, name='span'):
         """Start a span.

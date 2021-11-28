@@ -14,4 +14,5 @@ dependencies:
     - opencensus-ext-azure==1.1.*
     - opencensus-ext-logging==0.1.*
     - opencensus-ext-httplib==0.7.*
+    - debugpy==1.5.*
 
