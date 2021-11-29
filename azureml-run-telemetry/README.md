@@ -86,6 +86,10 @@ if __name__ == '__main__':
     logger.end_span()
 ```
 
+**Samples**:
+
+* [Using Observability class in a ScriptStep](samples/script-step)
+
 ### 4. Query logs and metrics
 
 #### correlation_id

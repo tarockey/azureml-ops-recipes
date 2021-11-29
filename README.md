@@ -1,55 +1,22 @@
 # Azure Machine Learning Monitoring Recipes
 
-## Requirements
+This repository contains a work-in-progress set of recipes for monitoring Azure Machine Learning resources and pipelines.
 
-* Deployment scripts must be executed on Linux, macOS or Windows Subsystem for Linux
-* [Terraform 1.0.11+](https://www.terraform.io/downloads.html)
-* [Azure CLI 2.30+](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-* [Azure Machine Learning CLI v2](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli)
+## Configuring Azure Machine Learning Workspace with Azure Log Analytics
 
-## Deployment
+* [aml-log-analytics](aml-log-analytics) - Terraform scripts for configuring an existing Azure Machine Learning workspace with Azure Log Analytics for monitoring.
 
-### 1. Initialize Terraform Module
+## Application Insights for Azure Machine Learning Pipelines
 
-```bash
-cd terraform/aml_log_anaytics
-terraform init
-```
+* [azureml-run-telemetry](azureml-run-telemetry) - A Python package for Consolidating Azure ML Pipeline telemetry in Azure Monitor with Application Insights.
 
-### 2. Create a Terraform Plan
+> Includes [samples](azureml-run-telemetry/samples).
 
-**Option 1**: Creating a new Azure Log Analytics Workspace
+## Log Analytics Samples
 
-```bash
-terraform plan -var 'azureml_workspace=<Azure Resource ID of an existing Azure ML workspace' -out=plan.tfplan
-```
+* [log-anaytics-samples](log-anaytics-examples) - Examples of monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
 
-When creating a new Log Analytics Workspace, you can provide the following optional variables (using `-var` parameters):
+> These samples require Azure ML workspace to be configured with Azure Log Analytics, and assume that you run [samples from azureml-run-telemetry package](azureml-run-telemetry/samples).
 
-* `log_analytics_sku` - Azure Log Analytics SKU, default value is `PerGB2018`
-* `log_analytics_retention_in_days` - Log Analytics Data Retention period is `90`
-* `log_analytics_tags` - tags to assign to Log Analytics Workspace, default is empty
-
-**Option 2**: Using an existing Azure Log Analytics Workspace
-
-```bash
-terraform plan \
-    -var 'azureml_workspace=<Azure Resource ID of an existing Azure ML workspace>' \
-    -var 'existing_log_analytics_workspace=<Azure Resource ID of an existing Azure ML workspace>'\
-    -out=plan.tfplan
-```
-
-### 3. Execute Terraform Plan
-
-```bash
-terraform apply -auto-approve plan.tfplan
-```
-
-### Example
-
-```bash
-cd terraform/aml_log_anaytics
-terraform init
-terraform plan -var 'azureml_workspace="/subscriptions/af10f960-61a9-4c1c-a9a9-2abb2ea1629b/resourceGroups/aml-observability-rg/providers/Microsoft.MachineLearningServices/workspaces/aml-observability"' -out=plan.tfplan
-terraform apply -auto-approve plan.tfplan
-```
+1. [log-anaytics-samples/log-analytics-jupyter](log-anaytics-examples/log-analytics-jupyter) - Jupyter Notebook sample for monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
+1. [log-anaytics-samples/log-analytics-queries](log-anaytics-examples/log-analytics-queries) - Azure Resource Manager template of a Log Analytics workbook for monitoring and analyzing Azure Machine Learning pipelines.
