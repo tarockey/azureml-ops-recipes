@@ -13,6 +13,8 @@ AppTraces
 | render barchart
 ```
 
+![Runs with errors](runs-with-errors.jpg)
+
 ## Failed Runs per Experiment
 
 ```sql
@@ -21,6 +23,8 @@ AmlComputeJobEvent
 | summarize Count=count() by ExperimentName, JobName
 | render barchart
 ```
+
+![Failed runs](failed-runs.jpg)
 
 ## Accuracy by Experiment over time
 
@@ -34,4 +38,18 @@ AppMetrics
 | distinct TimeGenerated, ExperimentName, Name, Val
 | order by TimeGenerated asc
 | render timechart
+```
+
+![Accuracy over time](accuracy.jpg)
+
+## Workbook ARM file
+
+`log_analytics_workbook_sample_arm.json` contains ARM template of Azure ML Workbook that runs the queries above.
+
+```bash
+az deployment group create \
+  --name AMLObservabilityExamplesDeployment \
+  --resource-group <Resource Group to deploy to> \
+  --template-file log_analytics_workbook_sample_arm.json \
+  --parameters workbookSourceId=<Resource Id of an Azure Log Analytics Workspace>
 ```
