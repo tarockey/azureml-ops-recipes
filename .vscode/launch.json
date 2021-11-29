@@ -10,28 +10,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Remote Attach",
-            "type": "python",
-            "request": "attach",
-            "connect": {
-                "host": "${input:debuggingHostIp}",
-                "port": 5678
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}/azureml-run-telemetry",
-                    "remoteRoot": "."
-                }
-            ]
-        }
-    ],
-    "inputs": [
-        {
-            "id": "debuggingHostIp",
-            "description": "Enter a remote host IP address to connect to",
-            "type": "promptString"
         }
     ]
 }
