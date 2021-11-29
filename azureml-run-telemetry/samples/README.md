@@ -50,6 +50,7 @@ TRACE_SAMPLING_RATE = '1.0'
 METRICS_EXPORT_INTERVAL = '15'
 # Whether to log App Insights standard machine metrics, CPU, memory etc, default to 'false'
 ENABLE_STANDARD_METRICS = 'true'
+```
 
 ### 4. Run the sample
 
