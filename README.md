@@ -40,9 +40,9 @@ This package introduces [Observability](azureml-run-telemetry/azureml_appinsight
 
 ## Log Analytics Samples
 
-* [log-anaytics-samples](log-anaytics-examples) - Examples of monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
+* [log-analytics-samples](log-analytics-samples) - Examples of monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
 
 > These samples require Azure ML workspace to be configured with Azure Log Analytics, and assume that you run [samples from azureml-run-telemetry package](azureml-run-telemetry/samples).
 
-1. [log-anaytics-samples/log-analytics-jupyter](log-anaytics-examples/log-analytics-jupyter) - Jupyter Notebook sample for monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
-1. [log-anaytics-samples/log-analytics-queries](log-anaytics-examples/log-analytics-queries) - Azure Resource Manager template of a Log Analytics workbook for monitoring and analyzing Azure Machine Learning pipelines.
+1. [log-analytics-samples/log-analytics-jupyter](log-analytics-samples/log-analytics-jupyter) - Jupyter Notebook sample for monitoring and analyzing Azure Machine Learning pipelines with Azure Log Analytics.
+1. [log-analytics-samples/log-analytics-queries](log-analytics-samples/log-analytics-queries) - Azure Resource Manager template of a Log Analytics workbook for monitoring and analyzing Azure Machine Learning pipelines.
