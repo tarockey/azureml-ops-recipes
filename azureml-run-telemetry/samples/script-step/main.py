@@ -42,7 +42,7 @@ def main():
     )
 
     # Submit an Azure ML Run which uses the logger
-    aml_exp = Experiment(aml_ws, 'test_logger_3')
+    aml_exp = Experiment(aml_ws, 'test_logger_4')
     aml_env = Environment.from_conda_specification(
         'test_logger_env', f'{source_directory}/samples/conda_dependency.yml')
 
