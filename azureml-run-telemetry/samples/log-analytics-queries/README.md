@@ -21,3 +21,17 @@ AmlComputeJobEvent
 | summarize Count=count() by ExperimentName, JobName
 | render barchart
 ```
+
+## Accuracy by Experiment over time
+
+```sql
+AppMetrics
+| where Name == "accuracy" 
+| extend RunId=tostring(Properties.correlation_id)
+| project TimeGenerated, RunId, Name, Val=Sum/ItemCount
+| join AmlComputeJobEvent on $left.RunId == $right.JobName
+| project TimeGenerated, ExperimentName, Name, Val
+| distinct TimeGenerated, ExperimentName, Name, Val
+| order by TimeGenerated asc
+| render timechart
+```
