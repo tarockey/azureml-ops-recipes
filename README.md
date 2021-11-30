@@ -36,7 +36,7 @@ Consolidating pipeline custom code telemetry with Azure ML infrastructure teleme
 
 > Includes [samples](azureml-run-telemetry/samples).
 
-This package introduces [Observability](azureml-run-telemetry/azureml_appinsights_logger/observability.py#L53) class that consolidates the telemetry from Azure ML Pipelines in Azure Monitor with Application Insights, along with built-in Azure ML logging capabilities.
+This package introduces the [Observability](azureml-run-telemetry/azureml_appinsights_logger/observability.py#L53) class that consolidates the telemetry from Azure ML Pipelines in Azure Monitor with Application Insights, along with built-in Azure ML logging capabilities.
 
 ## Log Analytics Samples
 
