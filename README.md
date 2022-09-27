@@ -1,3 +1,5 @@
+# This code has been moved to https://github.com/cse-labs/mlops-azureml-ops-recipes for any future updates.
+
 # Azure Machine Learning Monitoring Recipes
 
 This repository contains a work-in-progress set of recipes for monitoring Azure Machine Learning resources and pipelines.
